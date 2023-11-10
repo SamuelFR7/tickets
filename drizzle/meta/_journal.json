@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1699577971733,
+      "tag": "0000_wild_hammerhead",
+      "breakpoints": true
+    }
+  ]
+}
