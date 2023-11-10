@@ -1,0 +1,29 @@
+name: Code check
+
+on:
+  pull_request:
+    branches: ['*']
+
+env:
+  DATABASE_URL: 'https://fakeurl.com'
+
+jobs:
+  typecheck-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install deps
+        run: bun install
+
+      - name: Run lint
+        run: bun run lint
+
+      - name: Run typecheck
+        run: bun run check
