@@ -1,60 +1,60 @@
-import {
-  bigint,
-  mysqlEnum,
-  mysqlTableCreator,
-  timestamp,
-  varchar,
-} from 'drizzle-orm/mysql-core'
+import { text, integer, sqliteTable, blob } from 'drizzle-orm/sqlite-core'
 import { createId } from '@paralleldrive/cuid2'
 
-export const mysqlTable = mysqlTableCreator((name) => `tickets_${name}`)
-
-export const tickets = mysqlTable('tickets', {
-  id: varchar('id', { length: 255 })
+export const tickets = sqliteTable('tickets', {
+  id: text('id', { length: 255 })
     .primaryKey()
     .$defaultFn(() => createId()),
-  title: varchar('title', { length: 255 }).notNull(),
-  description: varchar('description', { length: 255 }),
-  status: mysqlEnum('status', ['open', 'closed']).notNull().default('open'),
-  createdAt: timestamp('created_at').notNull().defaultNow(),
-  updatedAt: timestamp('updated_at').notNull().onUpdateNow(),
+  title: text('title', { length: 255 }).notNull(),
+  description: text('description', { length: 255 }),
+  status: text('status', ['open', 'closed']).notNull().default('open'),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
 })
 
-export const user = mysqlTable('auth_user', {
-  id: varchar('id', {
+export const user = sqliteTable('auth_user', {
+  id: text('id', {
     length: 15,
   }).primaryKey(),
-  username: varchar('username', {
+  username: text('username', {
     length: 150,
   })
     .notNull()
     .unique(),
-  role: mysqlEnum('role', ['admin', 'user']).notNull().default('user'),
+  role: text('role', { enum: ['admin', 'user'] })
+    .notNull()
+    .default('user'),
 })
 
-export const key = mysqlTable('user_key', {
-  id: varchar('id', {
+export const key = sqliteTable('user_key', {
+  id: text('id', {
     length: 15,
   }).primaryKey(),
-  userId: varchar('user_id', {
+  userId: text('user_id', {
     length: 15,
-  }).notNull(),
-  hashedPassword: varchar('hashed_password', {
+  })
+    .notNull()
+    .references(() => user.id),
+  hashedPassword: text('hashed_password', {
     length: 255,
   }),
 })
 
-export const session = mysqlTable('user_session', {
-  id: varchar('id', {
+export const session = sqliteTable('user_session', {
+  id: text('id', {
     length: 128,
   }).primaryKey(),
-  userId: varchar('user_id', {
+  userId: text('user_id', {
     length: 15,
+  })
+    .notNull()
+    .references(() => user.id),
+  activeExpires: blob('active_expires', {
+    mode: 'bigint',
   }).notNull(),
-  activeExpires: bigint('active_expires', {
-    mode: 'number',
-  }).notNull(),
-  idleExpires: bigint('idle_expires', {
-    mode: 'number',
+  idleExpires: blob('idle_expires', {
+    mode: 'bigint',
   }).notNull(),
 })
