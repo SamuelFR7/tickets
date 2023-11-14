@@ -14,6 +14,10 @@ export const tickets = sqliteTable('tickets', {
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
 })
 
+export const whitelist = sqliteTable('white_list', {
+  email: text('email', { length: 255 }).notNull().unique(),
+})
+
 export const user = sqliteTable('auth_user', {
   id: text('id', {
     length: 15,
