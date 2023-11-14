@@ -7,7 +7,6 @@
   import type { FormOptions } from 'formsnap'
   import { goto } from '$app/navigation'
   import Button from '$lib/components/ui/button/button.svelte'
-  import Separator from '$lib/components/ui/separator/separator.svelte'
 
   export let form: SuperValidated<AuthSchema>
 
