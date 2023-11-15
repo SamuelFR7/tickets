@@ -13,9 +13,9 @@
     "lint": "eslint .",
     "shadcn:add": "bunx shadcn-svelte@latest add",
     "db:push": "drizzle-kit push:sqlite",
-    "db:introspect": "drizzle-kit introspect:mysql",
+    "db:introspect": "drizzle-kit introspect:sqlite",
     "db:studio": "drizzle-kit studio",
-    "db:generate": "drizzle-kit generate:mysql"
+    "db:generate": "drizzle-kit generate:sqlite"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^2.0.0",
@@ -24,6 +24,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "autoprefixer": "^10.4.14",
+    "better-sqlite3": "^9.1.1",
     "drizzle-kit": "^0.20.1",
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
@@ -34,6 +35,7 @@
     "prettier-plugin-svelte": "^2.10.1",
     "svelte": "^4.0.5",
     "svelte-check": "^3.4.3",
+    "svelte-headless-table": "^0.17.7",
     "tailwindcss": "^3.3.2",
     "tslib": "^2.4.1",
     "typescript": "^5.0.0",

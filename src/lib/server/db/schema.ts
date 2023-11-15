@@ -12,7 +12,12 @@ export const tickets = sqliteTable('tickets', {
     .notNull()
     .$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+  employeeId: text('employee_id', { length: 15 })
+    .references(() => user.id)
+    .notNull(),
 })
+
+export type Ticket = typeof tickets.$inferSelect
 
 export const whitelist = sqliteTable('white_list', {
   email: text('email', { length: 255 }).notNull().unique(),
