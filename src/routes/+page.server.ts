@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     throw redirect(302, '/auth/sign-in')
   }
 
-  const filter = url.searchParams.get('filter')
+  const search = url.searchParams.get('search')
   const page = url.searchParams.get('page')
 
   const limit = 10
@@ -28,8 +28,8 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     .limit(limit)
     .offset(offset)
     .where(
-      typeof filter === 'string'
-        ? like(tickets.title, `%${filter}%`)
+      typeof search === 'string'
+        ? like(tickets.title, `%${search}%`)
         : undefined
     )
 
@@ -37,8 +37,8 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     .select({ count: sql<number>`count(*)` })
     .from(tickets)
     .where(
-      typeof filter === 'string'
-        ? like(tickets.title, `%${filter}%`)
+      typeof search === 'string'
+        ? like(tickets.title, `%${search}%`)
         : undefined
     )
 

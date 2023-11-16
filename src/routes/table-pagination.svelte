@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
+  import { page } from '$app/stores'
   import Button from '$lib/components/ui/button/button.svelte'
 
   export let totalCount: number
@@ -8,11 +9,13 @@
   function previousPage() {
     const q = new URLSearchParams()
     q.set('page', String(currentPage - 1))
-    goto(`/?${q}`)
+    goto(`/?${q}`, {
+      keepFocus: true,
+    })
   }
 
   function nextPage() {
-    const q = new URLSearchParams()
+    const q = new URLSearchParams($page.url.searchParams.toString())
     q.set('page', String(currentPage + 1))
     goto(`/?${q}`)
   }

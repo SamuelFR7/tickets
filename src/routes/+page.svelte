@@ -1,18 +1,39 @@
 <script lang="ts">
-  import { writable } from 'svelte/store'
   import * as Table from '$lib/components/ui/table'
   import TableActions from './table-actions.svelte'
   import TablePagination from './table-pagination.svelte'
   import { page } from '$app/stores'
+  import Input from '$lib/components/ui/input/input.svelte'
+  import { goto } from '$app/navigation'
 
   export let data
+  let search: string
+  let timeout: ReturnType<typeof setTimeout>
 
   $: currentPage = $page.url.searchParams.get('page')
+
+  function searchByName() {
+    const q = new URLSearchParams($page.url.searchParams.toString())
+    q.set('search', search)
+    goto(`/?${q}`, {
+      keepFocus: true,
+    })
+  }
+
+  function handleSearch() {
+    if (timeout) clearTimeout(timeout)
+    timeout = setTimeout(searchByName, 300)
+  }
 </script>
 
-<div>
-  <h1 class="text-3xl font-bold">Bem vindo ao app Tickets</h1>
-  <h2 class="text-sm text-muted-foreground">Gerencie os chamados</h2>
+<div class="grid items-center gap-4 pb-8 pt-6 md:py-8 container">
+  <Input
+    placeholder="Pesquisar pelo título"
+    class="max-w-[15rem] w-full"
+    type="text"
+    bind:value={search}
+    on:input={handleSearch}
+  />
 
   <div>
     <div class="rounded-md border">
