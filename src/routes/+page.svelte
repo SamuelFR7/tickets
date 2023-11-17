@@ -18,7 +18,7 @@
       </div>
       <a href="/tickets/new" class={buttonVariants()}>Abrir Chamado</a>
     </div>
-    <div>
+    <div class="space-y-4">
       {#each data.tickets as ticket}
         <Card.Root>
           <Card.Header>
@@ -44,7 +44,10 @@
               <a href={`/ticket/${ticket.id}`} class={buttonVariants()}
                 >Visualizar</a
               >
-              <Button variant="destructive">Cancelar</Button>
+              <form action="?/cancel" method="POST">
+                <input type="hidden" name="id" value={ticket.id} />
+                <Button type="submit" variant="destructive">Cancelar</Button>
+              </form>
             </div>
           </Card.Content>
         </Card.Root>

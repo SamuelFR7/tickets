@@ -3,8 +3,19 @@
   import type { SuperValidated } from 'sveltekit-superforms'
   import * as Form from '$lib/components/ui/form'
   import { buttonVariants } from '$lib/components/ui/button'
+  import type { FormOptions } from 'formsnap'
+  import { goto } from '$app/navigation'
 
   export let form: SuperValidated<TicketSchema>
+
+  const options: FormOptions<TicketSchema> = {
+    validators: ticketSchema,
+    onResult: async ({ result }) => {
+      if (result.type === 'success') {
+        await goto('/')
+      }
+    },
+  }
 </script>
 
 <div class="max-w-4xl w-full mx-auto py-20">
@@ -12,6 +23,7 @@
     {form}
     method="POST"
     action="?/create"
+    {options}
     schema={ticketSchema}
     let:config
     class="space-y-3"
