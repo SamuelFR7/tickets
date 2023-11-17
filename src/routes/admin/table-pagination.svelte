@@ -7,9 +7,9 @@
   export let currentPage: number
 
   function previousPage() {
-    const q = new URLSearchParams()
+    const q = new URLSearchParams($page.url.searchParams.toString())
     q.set('page', String(currentPage - 1))
-    goto(`/?${q}`, {
+    goto(`/admin?${q}`, {
       keepFocus: true,
     })
   }
@@ -17,7 +17,7 @@
   function nextPage() {
     const q = new URLSearchParams($page.url.searchParams.toString())
     q.set('page', String(currentPage + 1))
-    goto(`/?${q}`)
+    goto(`/admin?${q}`)
   }
 </script>
 

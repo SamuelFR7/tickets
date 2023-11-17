@@ -28,7 +28,7 @@
       {/if}
       <form
         method="POST"
-        action="/?/logout"
+        action="/api/logout"
         use:enhance={({}) => {
           isLoading = true
 

@@ -62,6 +62,16 @@ export const GET = async ({ url, cookies, locals }) => {
       attributes: {},
     })
     locals.auth.setSession(session)
+
+    if (session.user.role === 'admin') {
+      return new Response(null, {
+        status: 302,
+        headers: {
+          Location: '/admin',
+        },
+      })
+    }
+
     return new Response(null, {
       status: 302,
       headers: {
