@@ -3,21 +3,24 @@
   import { newUserSchema, type NewUserSchema } from '$lib/validations/auth'
   import type { SuperValidated } from 'sveltekit-superforms'
   import type { FormOptions } from 'formsnap'
+  import { toast } from 'svelte-sonner'
 
   export let form: SuperValidated<NewUserSchema>
 
   const options: FormOptions<NewUserSchema> = {
     validators: newUserSchema,
-    onUpdated: (data) => {
-      if (data.form.data) {
-        console.log('Usuário cadastrado com sucesso!')
+    onResult: (data) => {
+      if (data.result.type === 'failure') {
+        return toast.error('Usuário já existe')
       }
+
+      toast.success('Usuário cadastrado com sucesso')
     },
   }
 </script>
 
 <div class="max-w-2xl w-full mx-auto mt-20">
-  <Form.Root {options} method="POST" {form} schema={newUserSchema} let:config>
+  <Form.Root method="POST" {options} {form} schema={newUserSchema} let:config>
     <Form.Field {config} name="username">
       <Form.Item>
         <Form.Label>Usuário</Form.Label>

@@ -10,5 +10,4 @@ export default {
   out: './drizzle',
   driver: 'turso',
   dbCredentials,
-  verbose: true,
 } satisfies Config

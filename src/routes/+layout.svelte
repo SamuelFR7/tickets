@@ -3,6 +3,7 @@
   import Header from '$lib/components/header.svelte'
   import '../app.postcss'
   import { ModeWatcher } from 'mode-watcher'
+  import { Toaster } from 'svelte-sonner'
 
   export let data
 
@@ -25,3 +26,4 @@
     <slot />
   </main>
 </div>
+<Toaster />

@@ -6,6 +6,8 @@
   export let totalCount: number
   export let currentPage: number
 
+  const hasNextPage = currentPage < Math.ceil(totalCount / 10)
+
   function previousPage() {
     const q = new URLSearchParams($page.url.searchParams.toString())
     q.set('page', String(currentPage - 1))
@@ -31,7 +33,7 @@
   <Button
     variant="outline"
     size="sm"
-    disabled={currentPage === Math.ceil(totalCount / 10)}
+    disabled={!hasNextPage}
     on:click={nextPage}>Next</Button
   >
 </div>

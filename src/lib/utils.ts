@@ -60,3 +60,14 @@ export const flyAndScale = (
     easing: cubicOut,
   }
 }
+
+export function formatDate(date: Date | null) {
+  if (!date) {
+    return ''
+  }
+
+  return new Intl.DateTimeFormat('pt-BR', {
+    dateStyle: 'long',
+    timeStyle: 'short',
+  }).format(date)
+}

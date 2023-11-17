@@ -11,7 +11,7 @@ export const tickets = sqliteTable('tickets', {
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
     .$defaultFn(() => new Date()),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }),
   employeeId: text('employee_id', { length: 15 })
     .references(() => user.id)
     .notNull(),
