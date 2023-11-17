@@ -2,12 +2,12 @@
   import Button from '$lib/components/ui/button/button.svelte'
   import { buttonVariants } from '$lib/components/ui/button/index.js'
   import * as Card from '$lib/components/ui/card'
-  import { formatDate } from '$lib/utils.js'
+  import { formatDate, translateStatus, truncate } from '$lib/utils.js'
 
   export let data
 </script>
 
-<main class="max-w-4xl mx-auto w-full py-20 space-y-6">
+<main class="max-w-6xl mx-auto w-full py-20 space-y-6">
   {#if data.tickets.length > 0}
     <div class="flex w-full items-center justify-between">
       <div>
@@ -18,27 +18,33 @@
       </div>
       <a href="/tickets/new" class={buttonVariants()}>Abrir Chamado</a>
     </div>
-    <div class="space-y-4">
+    <div class="grid grid-cols-3 gap-4">
       {#each data.tickets as ticket}
         <Card.Root>
           <Card.Header>
             <Card.Title>{ticket.title}</Card.Title>
             <Card.Description
-              >{ticket.description ?? 'Sem descrição'}</Card.Description
+              >{ticket.description
+                ? truncate(ticket.description, 40)
+                : 'Sem descrição'}</Card.Description
             >
           </Card.Header>
-          <Card.Content>
-            <div>
-              <span class="font-medium">Status:</span>
-              {ticket.status}
-            </div>
-            <div>
-              <span class="font-medium">Aberto em:</span>
-              {formatDate(ticket.createdAt)}
-            </div>
-            <div>
-              <span class="font-medium">Ultima atualização:</span>
-              {formatDate(ticket.updatedAt)}
+          <Card.Content class="space-y-4">
+            <div class="space-y-2">
+              <div>
+                <span class="font-medium">Status:</span>
+                {translateStatus(ticket.status)}
+              </div>
+              <div>
+                <span class="font-medium">Aberto em:</span>
+                {formatDate(ticket.createdAt)}
+              </div>
+              {#if ticket.updatedAt}
+                <div>
+                  <span class="font-medium">Ultima atualização:</span>
+                  {formatDate(ticket.updatedAt)}
+                </div>
+              {/if}
             </div>
             <div class="justify-end flex space-x-4">
               <a href={`/ticket/${ticket.id}`} class={buttonVariants()}

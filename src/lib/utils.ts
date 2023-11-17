@@ -67,7 +67,26 @@ export function formatDate(date: Date | null) {
   }
 
   return new Intl.DateTimeFormat('pt-BR', {
-    dateStyle: 'long',
+    dateStyle: 'medium',
     timeStyle: 'short',
   }).format(date)
+}
+
+export function translateStatus(status: string) {
+  switch (status) {
+    case 'open':
+      return 'Aberto'
+    case 'closed':
+      return 'Fechado'
+    default:
+      return 'Status inválido'
+  }
+}
+
+export function truncate(text: string, length: number) {
+  if (text.length <= length) {
+    return text
+  }
+
+  return text.slice(0, length) + '...'
 }
