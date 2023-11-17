@@ -16,7 +16,7 @@
           Veja todos os seus chamados em aberto
         </p>
       </div>
-      <a href="/tickets/new" class={buttonVariants()}>Abrir Chamado</a>
+      <a href="/ticket/new" class={buttonVariants()}>Abrir Chamado</a>
     </div>
     <div class="grid grid-cols-3 gap-4">
       {#each data.tickets as ticket}
@@ -64,7 +64,7 @@
       <h1 class="text-2xl font-bold">Nenhum chamado encontrado</h1>
       <p class="text-lg">Você ainda não tem nenhum chamado em aberto</p>
       <div class="mt-4">
-        <a href="/tickets/new" class={buttonVariants()}>Abrir chamado</a>
+        <a href="/ticket/new" class={buttonVariants()}>Abrir chamado</a>
       </div>
     </div>
   {/if}
