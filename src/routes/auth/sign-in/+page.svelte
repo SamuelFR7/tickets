@@ -12,8 +12,8 @@
 
   const options: FormOptions<AuthSchema> = {
     validators: authSchema,
-    onUpdated: ({ form }) => {
-      if (form.valid) {
+    onResult: ({ result }) => {
+      if (result.type === 'success') {
         goto('/')
       }
     },
