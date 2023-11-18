@@ -2,7 +2,7 @@ import { redirect } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import { db } from '$lib/server/db'
 import { tickets } from '$lib/server/db/schema'
-import { like, sql } from 'drizzle-orm'
+import { and, eq, like, sql } from 'drizzle-orm'
 
 export const load: PageServerLoad = async ({ locals, url }) => {
   const session = await locals.auth.validate()
@@ -27,9 +27,12 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     .limit(limit)
     .offset(offset)
     .where(
-      typeof search === 'string'
-        ? like(tickets.title, `%${search}%`)
-        : undefined
+      and(
+        eq(tickets.status, 'open'),
+        typeof search === 'string'
+          ? like(tickets.title, `%${search}%`)
+          : undefined
+      )
     )
 
   const totalCount = await db

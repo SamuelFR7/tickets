@@ -15,7 +15,7 @@
 <header
   class="w-full max-w-full flex items-center justify-between border-b p-6"
 >
-  <a href="/">
+  <a href={session?.user.role === 'admin' ? '/admin' : '/'}>
     <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
       Tickets
     </h1>
