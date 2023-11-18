@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit'
+import { redirect, type Actions } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import { db } from '$lib/server/db'
 import { tickets } from '$lib/server/db/schema'
@@ -48,4 +48,25 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     tickets: ticketsQuery,
     totalCount: totalCount[0].count,
   }
+}
+
+export const actions: Actions = {
+  close: async ({ request, locals }) => {
+    const session = await locals.auth.validate()
+
+    if (!session) {
+      throw new Error('Unauthorized')
+    }
+
+    const data = await request.formData()
+
+    const ticketId = data.get('id') as string
+
+    await db
+      .update(tickets)
+      .set({
+        status: 'closed',
+      })
+      .where(eq(tickets.id, ticketId))
+  },
 }

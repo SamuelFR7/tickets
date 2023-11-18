@@ -13,19 +13,16 @@
       size="icon"
       class="relative w-8 h-8 p-0"
     >
-      <span class="sr-only">Open menu</span>
+      <span class="sr-only">Abrir menu</span>
       <MoreHorizontal class="w-4 h-4" />
     </Button>
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
-    <DropdownMenu.Group>
-      <DropdownMenu.Label>Actions</DropdownMenu.Label>
-      <DropdownMenu.Item on:click={() => navigator.clipboard.writeText(id)}>
-        Copy payment ID
-      </DropdownMenu.Item>
-    </DropdownMenu.Group>
-    <DropdownMenu.Separator />
-    <DropdownMenu.Item>View customer</DropdownMenu.Item>
-    <DropdownMenu.Item>View payment details</DropdownMenu.Item>
+    <form action="?/close" method="POST">
+      <input type="hidden" name="id" value={id} />
+      <DropdownMenu.Item
+        ><button type="submit">Fechar chamado</button></DropdownMenu.Item
+      >
+    </form>
   </DropdownMenu.Content>
 </DropdownMenu.Root>

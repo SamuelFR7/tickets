@@ -41,11 +41,11 @@
       <Table.Root>
         <Table.Header>
           <Table.Row>
-            <Table.Head>Titulo</Table.Head>
+            <Table.Head>Título</Table.Head>
             <Table.Head>Status</Table.Head>
-            <Table.Head>Data de Criacao</Table.Head>
-            <Table.Head>Última de atualização</Table.Head>
-            <Table.Head>Acoes</Table.Head>
+            <Table.Head>Data de Abertura</Table.Head>
+            <Table.Head>Última de Atualização</Table.Head>
+            <Table.Head>Ações</Table.Head>
           </Table.Row>
         </Table.Header>
         <Table.Body>

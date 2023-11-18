@@ -4,17 +4,21 @@
   import type { SuperValidated } from 'sveltekit-superforms'
   import type { FormOptions } from 'formsnap'
   import { toast } from 'svelte-sonner'
+  import { goto } from '$app/navigation'
 
   export let form: SuperValidated<NewUserSchema>
 
   const options: FormOptions<NewUserSchema> = {
     validators: newUserSchema,
-    onResult: (data) => {
-      if (data.result.type === 'failure') {
-        return toast.error('Usuário já existe')
+    onResult: async ({ result }) => {
+      if (result.type === 'failure' && typeof result.data.error === 'string') {
+        return toast.error(result.data.error)
       }
 
-      toast.success('Usuário cadastrado com sucesso')
+      if (result.type === 'success') {
+        toast.success('Usuário cadastrado com sucesso!')
+        await goto('/admin')
+      }
     },
   }
 </script>

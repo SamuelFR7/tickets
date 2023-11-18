@@ -28,12 +28,12 @@
     variant="outline"
     size="sm"
     on:click={previousPage}
-    disabled={currentPage === 1}>Previous</Button
+    disabled={currentPage === 1}>Anterior</Button
   >
   <Button
     variant="outline"
     size="sm"
     disabled={!hasNextPage}
-    on:click={nextPage}>Next</Button
+    on:click={nextPage}>Próxima</Button
   >
 </div>
