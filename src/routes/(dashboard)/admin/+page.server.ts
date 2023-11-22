@@ -39,9 +39,12 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     .select({ count: sql<number>`count(*)` })
     .from(tickets)
     .where(
-      typeof search === 'string'
-        ? like(tickets.title, `%${search}%`)
-        : undefined
+      and(
+        eq(tickets.status, 'open'),
+        typeof search === 'string'
+          ? like(tickets.title, `%${search}%`)
+          : undefined
+      )
     )
 
   return {

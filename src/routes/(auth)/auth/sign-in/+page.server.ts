@@ -1,9 +1,9 @@
 import { superValidate, setError } from 'sveltekit-superforms/server'
-import type { PageServerLoad } from './$types'
 import { authSchema } from '$lib/validations/auth'
 import { fail, type Actions, redirect } from '@sveltejs/kit'
 import { auth } from '$lib/server/lucia'
 import { LuciaError } from 'lucia'
+import type { PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ locals }) => {
   const session = await locals.auth.validate()
