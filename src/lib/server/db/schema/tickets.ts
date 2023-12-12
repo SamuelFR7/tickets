@@ -19,3 +19,4 @@ export const tickets = sqliteTable('tickets', {
 })
 
 export type Ticket = typeof tickets.$inferSelect
+export type TicketInsert = typeof tickets.$inferInsert

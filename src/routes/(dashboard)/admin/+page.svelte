@@ -8,6 +8,7 @@
   import { ArrowUpDown } from 'lucide-svelte'
   import { buttonVariants } from '$lib/components/ui/button'
   import Button from '$lib/components/ui/button/button.svelte'
+  import * as Select from '$lib/components/ui/select'
 
   export let data
   let search: string
@@ -28,13 +29,35 @@
 </script>
 
 <div class="grid items-center gap-4 pb-8 pt-6 md:py-8 container">
-  <Input
-    placeholder="Pesquisar pelo título"
-    class="max-w-[15rem] w-full"
-    type="text"
-    bind:value={search}
-    on:input={handleSearch}
-  />
+  <div class="flex items-center space-x-4">
+    <Input
+      placeholder="Pesquisar pelo título"
+      class="max-w-[15rem] w-full"
+      type="text"
+      bind:value={search}
+      on:input={handleSearch}
+    />
+    <Select.Root portal={null}>
+      <Select.Trigger class="w-[180px]">
+        <Select.Value placeholder="Filtre por um status" />
+      </Select.Trigger>
+      <Select.Content>
+        <a
+          href={`/admin?page=${data.page}&search=${search ?? ''}&order_by=${
+            data.orderBy ?? ''
+          }&status=open`}><Select.Item value="open">Aberto</Select.Item></a
+        >
+        <a
+          href={`/admin?page=${data.page}&search=${search ?? ''}&order_by=${
+            data.orderBy ?? ''
+          }&status=closed`}
+        >
+          <Select.Item value="closed">Fechado</Select.Item>
+        </a>
+      </Select.Content>
+      <Select.Input name="favoriteFruit" />
+    </Select.Root>
+  </div>
 
   <div>
     <div class="rounded-md border">
@@ -45,7 +68,7 @@
               <a
                 href={`/admin?page=1&search=${search ?? ''}&order_by=title.${
                   data.order === 'title.asc' ? 'desc' : 'asc'
-                }`}
+                }&status=${data.status}`}
                 data-sveltekit-preload-data="hover"
                 class={buttonVariants({ variant: 'ghost' })}
                 ><span>Título</span>
@@ -59,7 +82,7 @@
                   search ?? ''
                 }&search=&order_by=createdAt.${
                   data.order === 'createdAt.asc' ? 'desc' : 'asc'
-                }`}
+                }&status=${data.status}`}
                 data-sveltekit-preload-data="hover"
                 class={buttonVariants({ variant: 'ghost' })}
               >
@@ -68,7 +91,6 @@
               </a>
             </Table.Head>
             <Table.Head>Última de Atualização</Table.Head>
-
             <Table.Head>Ações</Table.Head>
           </Table.Row>
         </Table.Header>
@@ -88,10 +110,11 @@
     <div class="flex items-center space-x-2 justify-end mt-2">
       {#if data.page > 1}
         <a
+          data-sveltekit-noscroll={true}
           data-sveltekit-preload-data="hover"
           href={`/admin?page=${data.page - 1}&search=${search ?? ''}&order_by=${
             data.order
-          }`}
+          }&status=${data.status}`}
           class={buttonVariants({ variant: 'outline' })}
         >
           Anterior
@@ -99,12 +122,13 @@
       {:else}
         <Button disabled variant="outline">Anterior</Button>
       {/if}
-      {#if data.page > Math.ceil(data.totalCount / 10)}
+      {#if data.page < Math.ceil(data.totalCount / 10)}
         <a
+          data-sveltekit-noscroll={true}
           data-sveltekit-preload-data="hover"
           href={`/admin?page=${data.page + 1}&search=${search ?? ''}&order_by=${
             data.order
-          }`}
+          }&status=${data.status}`}
           class={buttonVariants({ variant: 'outline' })}
         >
           Próxima

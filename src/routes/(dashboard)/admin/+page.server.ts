@@ -14,6 +14,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
   const search = url.searchParams.get('search')
   const page = url.searchParams.get('page')
   const orderBy = url.searchParams.get('order_by')
+  const status = url.searchParams.get('status')
 
   const [column, order] =
     typeof orderBy === 'string'
@@ -22,7 +23,6 @@ export const load: PageServerLoad = async ({ locals, url }) => {
           'asc' | 'desc' | undefined
         ])
       : [undefined, undefined]
-
   const limit = 10
 
   const numberPage =
@@ -44,7 +44,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     )
     .where(
       and(
-        eq(tickets.status, 'open'),
+        status ? eq(tickets.status, status) : undefined,
         typeof search === 'string'
           ? like(tickets.title, `%${search}%`)
           : undefined
@@ -68,6 +68,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     totalCount: totalCount[0].count,
     page: numberPage,
     order: orderBy,
+    status,
   }
 }
 
