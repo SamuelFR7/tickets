@@ -7,6 +7,7 @@
   import { formatDate, translateStatus } from '$lib/utils'
   import { ArrowUpDown } from 'lucide-svelte'
   import { buttonVariants } from '$lib/components/ui/button'
+  import Button from '$lib/components/ui/button/button.svelte'
 
   export let data
   let search: string
@@ -85,24 +86,32 @@
       </Table.Root>
     </div>
     <div class="flex items-center space-x-2 justify-end mt-2">
-      <a
-        data-sveltekit-preload-data="hover"
-        href={`/admin?page=${data.page - 1}&search=${search ?? ''}&order_by=${
-          data.order
-        }`}
-        class={buttonVariants({ variant: 'outline' })}
-      >
-        Anterior
-      </a>
-      <a
-        data-sveltekit-preload-data="hover"
-        href={`/admin?page=${data.page + 1}&search=${search ?? ''}&order_by=${
-          data.order
-        }`}
-        class={buttonVariants({ variant: 'outline' })}
-      >
-        Próxima
-      </a>
+      {#if data.page > 1}
+        <a
+          data-sveltekit-preload-data="hover"
+          href={`/admin?page=${data.page - 1}&search=${search ?? ''}&order_by=${
+            data.order
+          }`}
+          class={buttonVariants({ variant: 'outline' })}
+        >
+          Anterior
+        </a>
+      {:else}
+        <Button disabled variant="outline">Anterior</Button>
+      {/if}
+      {#if data.page > Math.ceil(data.totalCount / 10)}
+        <a
+          data-sveltekit-preload-data="hover"
+          href={`/admin?page=${data.page + 1}&search=${search ?? ''}&order_by=${
+            data.order
+          }`}
+          class={buttonVariants({ variant: 'outline' })}
+        >
+          Próxima
+        </a>
+      {:else}
+        <Button disabled variant="outline">Próxima</Button>
+      {/if}
     </div>
   </div>
 </div>
