@@ -6,7 +6,7 @@ const dbCredentials = {
 }
 
 export default {
-  schema: './src/lib/server/db/schema.ts',
+  schema: './src/lib/server/db/schema/index.ts',
   out: './drizzle',
   driver: 'turso',
   dbCredentials,

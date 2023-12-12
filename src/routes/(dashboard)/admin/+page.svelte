@@ -1,17 +1,16 @@
 <script lang="ts">
   import * as Table from '$lib/components/ui/table'
   import TableActions from './table-actions.svelte'
-  import TablePagination from './table-pagination.svelte'
   import { page } from '$app/stores'
   import Input from '$lib/components/ui/input/input.svelte'
   import { goto } from '$app/navigation'
   import { formatDate, translateStatus } from '$lib/utils'
+  import { ArrowUpDown } from 'lucide-svelte'
+  import { buttonVariants } from '$lib/components/ui/button'
 
   export let data
   let search: string
   let timeout: ReturnType<typeof setTimeout>
-
-  $: currentPage = $page.url.searchParams.get('page')
 
   function searchByName() {
     const q = new URLSearchParams($page.url.searchParams.toString())
@@ -41,10 +40,34 @@
       <Table.Root>
         <Table.Header>
           <Table.Row>
-            <Table.Head>Título</Table.Head>
+            <Table.Head>
+              <a
+                href={`/admin?page=1&search=${search ?? ''}&order_by=title.${
+                  data.order === 'title.asc' ? 'desc' : 'asc'
+                }`}
+                data-sveltekit-preload-data="hover"
+                class={buttonVariants({ variant: 'ghost' })}
+                ><span>Título</span>
+                <ArrowUpDown class={'ml-2 h-4 w-4'} />
+              </a>
+            </Table.Head>
             <Table.Head>Status</Table.Head>
-            <Table.Head>Data de Abertura</Table.Head>
+            <Table.Head>
+              <a
+                href={`/admin?page=1&search=${
+                  search ?? ''
+                }&search=&order_by=createdAt.${
+                  data.order === 'createdAt.asc' ? 'desc' : 'asc'
+                }`}
+                data-sveltekit-preload-data="hover"
+                class={buttonVariants({ variant: 'ghost' })}
+              >
+                <span>Data de Abertura</span>
+                <ArrowUpDown class={'ml-2 h-4 w-4'} />
+              </a>
+            </Table.Head>
             <Table.Head>Última de Atualização</Table.Head>
+
             <Table.Head>Ações</Table.Head>
           </Table.Row>
         </Table.Header>
@@ -61,13 +84,25 @@
         </Table.Body>
       </Table.Root>
     </div>
-    <TablePagination
-      currentPage={typeof currentPage === 'string'
-        ? parseInt(currentPage) > 0
-          ? parseInt(currentPage)
-          : 1
-        : 1}
-      totalCount={data.totalCount}
-    />
+    <div class="flex items-center space-x-2 justify-end mt-2">
+      <a
+        data-sveltekit-preload-data="hover"
+        href={`/admin?page=${data.page - 1}&search=${search ?? ''}&order_by=${
+          data.order
+        }`}
+        class={buttonVariants({ variant: 'outline' })}
+      >
+        Anterior
+      </a>
+      <a
+        data-sveltekit-preload-data="hover"
+        href={`/admin?page=${data.page + 1}&search=${search ?? ''}&order_by=${
+          data.order
+        }`}
+        class={buttonVariants({ variant: 'outline' })}
+      >
+        Próxima
+      </a>
+    </div>
   </div>
 </div>
