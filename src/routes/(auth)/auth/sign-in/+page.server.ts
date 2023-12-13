@@ -1,8 +1,4 @@
-import { superValidate, setError } from 'sveltekit-superforms/server'
-import { authSchema } from '$lib/validations/auth'
-import { fail, type Actions, redirect } from '@sveltejs/kit'
-import { auth } from '$lib/server/lucia'
-import { LuciaError } from 'lucia'
+import { redirect } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -12,46 +8,5 @@ export const load: PageServerLoad = async ({ locals }) => {
     throw redirect(302, '/')
   }
 
-  return {
-    form: superValidate(authSchema),
-  }
-}
-
-export const actions: Actions = {
-  default: async (event) => {
-    const form = await superValidate(event, authSchema)
-
-    if (!form.valid) {
-      return fail(400, {
-        form,
-      })
-    }
-
-    try {
-      const key = await auth.useKey(
-        'username',
-        form.data.username,
-        form.data.password
-      )
-
-      const session = await auth.createSession({
-        userId: key.userId,
-        attributes: {},
-      })
-
-      event.locals.auth.setSession(session)
-    } catch (err) {
-      if (
-        err instanceof LuciaError &&
-        (err.message === 'AUTH_INVALID_KEY_ID' ||
-          err.message === 'AUTH_INVALID_PASSWORD')
-      ) {
-        return setError(form, 'password', 'User or password incorrects')
-      }
-    }
-
-    return {
-      form,
-    }
-  },
+  return {}
 }
