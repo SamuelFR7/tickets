@@ -66,21 +66,10 @@ export function formatDate(date: Date | null) {
     return ''
   }
 
-  return new Intl.DateTimeFormat('pt-BR', {
+  return new Intl.DateTimeFormat('en-US', {
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(date)
-}
-
-export function translateStatus(status: string) {
-  switch (status) {
-    case 'open':
-      return 'Aberto'
-    case 'closed':
-      return 'Fechado'
-    default:
-      return 'Status inválido'
-  }
 }
 
 export function truncate(text: string, length: number) {

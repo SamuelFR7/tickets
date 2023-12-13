@@ -16,7 +16,7 @@
       }
 
       if (result.type === 'success') {
-        toast.success('Usuário cadastrado com sucesso!')
+        toast.success('User created!')
         await goto('/admin')
       }
     },
@@ -27,25 +27,25 @@
   <Form.Root method="POST" {options} {form} schema={newUserSchema} let:config>
     <Form.Field {config} name="username">
       <Form.Item>
-        <Form.Label>Usuário</Form.Label>
+        <Form.Label>Username</Form.Label>
         <Form.Input />
         <Form.Validation />
       </Form.Item>
     </Form.Field>
     <Form.Field {config} name="password">
       <Form.Item>
-        <Form.Label>Senha</Form.Label>
+        <Form.Label>Password</Form.Label>
         <Form.Input type="password" />
         <Form.Validation />
       </Form.Item>
     </Form.Field>
     <Form.Field {config} name="passwordConfirmation">
       <Form.Item>
-        <Form.Label>Confirmar Senha</Form.Label>
+        <Form.Label>Confirm Password</Form.Label>
         <Form.Input type="password" />
         <Form.Validation />
       </Form.Item>
     </Form.Field>
-    <Form.Button class="ml-auto flex" type="submit">Cadastrar</Form.Button>
+    <Form.Button class="ml-auto flex" type="submit">Create</Form.Button>
   </Form.Root>
 </div>

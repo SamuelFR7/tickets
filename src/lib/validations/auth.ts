@@ -2,14 +2,14 @@ import { z } from 'zod'
 
 export const authSchema = z.object({
   username: z
-    .string({ required_error: 'Usuário é obrigatório' })
-    .min(1, 'Usuário é obrigatório')
-    .max(255, 'Usuário grande demais')
+    .string({ required_error: 'Username is required' })
+    .min(1, 'Username is required')
+    .max(255, 'Username too long')
     .toLowerCase(),
   password: z
-    .string({ required_error: 'Senha é obrigatória' })
-    .min(1, 'Senha é obrigatória')
-    .max(255, 'Senha grande demais'),
+    .string({ required_error: 'Password is required' })
+    .min(1, 'Password is required')
+    .max(255, 'Password too long'),
 })
 
 export type AuthSchema = typeof authSchema
@@ -17,22 +17,22 @@ export type AuthSchema = typeof authSchema
 export const newUserSchema = z
   .object({
     username: z
-      .string({ required_error: 'Usuário é obrigatório' })
-      .min(1, 'Usuário é obrigatório')
-      .max(255, 'Usuário grande demais')
+      .string({ required_error: 'Username is required' })
+      .min(1, 'Username is required')
+      .max(255, 'Username too long')
       .toLowerCase(),
     password: z
       .string({
-        required_error: 'Senha é obrigatória',
+        required_error: 'Password is required',
       })
-      .min(1, 'Senha é obrigatória')
-      .max(255, 'Senha grande demais'),
+      .min(1, 'Password is required')
+      .max(255, 'Password too long'),
     passwordConfirmation: z.string({
-      required_error: 'Confirmação de senha é obrigatória',
+      required_error: 'Password confirmation is required',
     }),
   })
   .refine((data) => data.password === data.passwordConfirmation, {
-    message: 'Senhas não conferem',
+    message: 'Passwords does not match',
     path: ['passwordConfirmation'],
   })
 

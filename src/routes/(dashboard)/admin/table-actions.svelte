@@ -29,7 +29,7 @@
       size="icon"
       class="relative w-8 h-8 p-0"
     >
-      <span class="sr-only">Abrir menu</span>
+      <span class="sr-only">Open menu</span>
       <MoreHorizontal class="w-4 h-4" />
     </Button>
   </DropdownMenu.Trigger>
@@ -42,7 +42,7 @@
       <input type="hidden" name="id" value={id} />
       <DropdownMenu.Item>
         <button type="submit" class="flex items-center">
-          <X class="text-red-700 h-4 w-4 mr-2" /> Fechar chamado
+          <X class="text-red-700 h-4 w-4 mr-2" /> Close ticket
         </button>
       </DropdownMenu.Item>
     </form>

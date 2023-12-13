@@ -10,6 +10,6 @@
     class={buttonVariants({
       variant: 'secondary',
     })}
-    href="/">Voltar</a
+    href="/">Return</a
   >
 </div>

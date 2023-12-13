@@ -33,7 +33,7 @@ export const actions: Actions = {
     if (userAlreadyExists) {
       return fail(400, {
         form,
-        error: 'Usuário já existe',
+        error: 'User already exists',
       })
     }
 
