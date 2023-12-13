@@ -1,22 +1,25 @@
 <script lang="ts">
   import * as Form from '$lib/components/ui/form'
-  import { newUserSchema, type NewUserSchema } from '$lib/validations/auth'
+  import {
+    inviteUserSchema,
+    type InviteUserSchema,
+  } from '$lib/validations/auth'
   import type { SuperValidated } from 'sveltekit-superforms'
   import type { FormOptions } from 'formsnap'
   import { toast } from 'svelte-sonner'
   import { goto } from '$app/navigation'
 
-  export let form: SuperValidated<NewUserSchema>
+  export let form: SuperValidated<InviteUserSchema>
 
-  const options: FormOptions<NewUserSchema> = {
-    validators: newUserSchema,
+  const options: FormOptions<InviteUserSchema> = {
+    validators: inviteUserSchema,
     onResult: async ({ result }) => {
       if (result.type === 'failure' && typeof result.data.error === 'string') {
         return toast.error(result.data.error)
       }
 
       if (result.type === 'success') {
-        toast.success('User created!')
+        toast.success('User invited!')
         await goto('/admin')
       }
     },
@@ -24,25 +27,17 @@
 </script>
 
 <div class="max-w-2xl w-full mx-auto mt-20">
-  <Form.Root method="POST" {options} {form} schema={newUserSchema} let:config>
-    <Form.Field {config} name="username">
+  <Form.Root
+    method="POST"
+    {options}
+    {form}
+    schema={inviteUserSchema}
+    let:config
+  >
+    <Form.Field {config} name="email">
       <Form.Item>
-        <Form.Label>Username</Form.Label>
+        <Form.Label>Email</Form.Label>
         <Form.Input />
-        <Form.Validation />
-      </Form.Item>
-    </Form.Field>
-    <Form.Field {config} name="password">
-      <Form.Item>
-        <Form.Label>Password</Form.Label>
-        <Form.Input type="password" />
-        <Form.Validation />
-      </Form.Item>
-    </Form.Field>
-    <Form.Field {config} name="passwordConfirmation">
-      <Form.Item>
-        <Form.Label>Confirm Password</Form.Label>
-        <Form.Input type="password" />
         <Form.Validation />
       </Form.Item>
     </Form.Field>

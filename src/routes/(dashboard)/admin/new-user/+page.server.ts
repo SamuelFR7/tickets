@@ -1,21 +1,22 @@
 import { superValidate } from 'sveltekit-superforms/server'
 import type { PageServerLoad } from '../../$types'
-import { newUserSchema } from '$lib/validations/auth'
+import { inviteUserSchema } from '$lib/validations/auth'
 import { fail, type Actions } from '@sveltejs/kit'
-import { auth } from '$lib/server/lucia'
 import { db } from '$lib/server/db'
-import { user } from '$lib/server/db/schema'
+import { whitelist } from '$lib/server/db/schema'
 import { eq } from 'drizzle-orm'
+import { resend } from '$lib/resend'
+import { InviteUserTemplate } from '$lib/mail/templates/invite-user'
 
 export const load: PageServerLoad = () => {
   return {
-    form: superValidate(newUserSchema),
+    form: superValidate(inviteUserSchema),
   }
 }
 
 export const actions: Actions = {
   default: async (event) => {
-    const form = await superValidate(event, newUserSchema)
+    const form = await superValidate(event, inviteUserSchema)
 
     if (!form.valid) {
       return fail(400, {
@@ -23,30 +24,31 @@ export const actions: Actions = {
       })
     }
 
-    const userAlreadyExistsQuery = await db
+    const userAlredyInvitedQuery = await db
       .select()
-      .from(user)
-      .where(eq(user.username, form.data.username))
+      .from(whitelist)
+      .where(eq(whitelist.email, form.data.email))
 
-    const userAlreadyExists = userAlreadyExistsQuery[0]
+    const userAlreadyInvited = userAlredyInvitedQuery[0]
 
-    if (userAlreadyExists) {
+    if (userAlreadyInvited) {
       return fail(400, {
         form,
-        error: 'User already exists',
+        error: 'User already invited',
       })
     }
 
-    await auth.createUser({
-      key: {
-        providerId: 'username',
-        providerUserId: form.data.username,
-        password: form.data.password,
-      },
-      attributes: {
-        username: form.data.username,
-        role: 'user',
-      },
+    await db.insert(whitelist).values({
+      email: form.data.email,
+    })
+
+    await resend.emails.send({
+      from: `Tickets <${process.env.MAIL_FROM}>`,
+      to: form.data.email,
+      subject: 'You have been invited to Tickets',
+      react: InviteUserTemplate({
+        inviteLink: `${process.env.BASE_URL}/auth/sign-in`,
+      }),
     })
 
     return {
