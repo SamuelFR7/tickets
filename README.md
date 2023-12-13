@@ -1,38 +1,98 @@
-# create-svelte
+<a name="readme-top"></a>
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+<!-- PROJECT SHIELDS -->
 
-## Creating a project
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
-If you're seeing this, you've probably already done this step. Congrats!
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/samuelfr7/tickets">
+    <img src=".github/assets/logo.png" alt="Logo" width="80" height="80">
+  </a>
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+<h3 align="center">Tickets</h3>
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+  <p align="center">
+    👨‍💻 This is a simple helpdesk web application.
+    <br />
+    <br />
+    <br />
+  </p>
+</div>
 
-## Developing
+### Built With
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+- [SvelteKit](https://kit.svelte.dev/)
+- [DrizzleORM](https://orm.drizzle.team/)
+- [Turso](https://turso.tech/)
+- [Lucia](https://lucia-auth.com/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Resend](https://resend.com/)
+- [React Email](https://react.email/)
+- [Bun](https://bun.sh/)
 
-```bash
-npm run dev
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+<!-- GETTING STARTED -->
 
-## Building
+## Getting Started
 
-To create a production version of your app:
+To get a local copy up and running follow these simple example steps.
 
-```bash
-npm run build
-```
+### Prerequisites
 
-You can preview the production build with `npm run preview`.
+- Turso db instance
+- Resend API Key
+- Google Auth API Key
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+### Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/samuelfr7/tickets.git
+   ```
+2. Copy env example
+   ```sh
+   cp .env.example .env
+   ```
+3. Fill env variables
+4. Install packages
+   ```sh
+   bun install
+   ```
+5. Migrate database
+   ```sh
+   bun db:migrate
+   ```
+6. Fill your database
+   ```sh
+   bun db:seed
+   ```
+7. Start the server
+   ```sh
+   bun dev
+   ```
+8. See the application running on http://localhost:5173
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- CONTACT -->
+
+## Contact
+
+Project Link: [https://github.com/samuelfr7/tickets](https://github.com/samuelfr7/tickets)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
+[stars-shield]: https://img.shields.io/github/stars/samuelfr7/tickets.svg?style=for-the-badge
+[stars-url]: https://github.com/samuelfr7/tickets/stargazers
+[issues-shield]: https://img.shields.io/github/issues/samuelfr7/tickets.svg?style=for-the-badge
+[issues-url]: https://github.com/samuelfr7/tickets/issues
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/samuelfr7

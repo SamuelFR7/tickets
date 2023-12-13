@@ -39,6 +39,19 @@ export const GET = async ({ url, cookies, locals }) => {
         return null
       }
 
+      if (process.env.NODE_ENV === 'development') {
+        if (process.env.MY_EMAIL === googleUser.email) {
+          const user = await createUser({
+            attributes: {
+              username: googleUser.email,
+              role: 'admin',
+            },
+          })
+
+          return user
+        }
+      }
+
       const user = await createUser({
         attributes: {
           username: googleUser.email,
