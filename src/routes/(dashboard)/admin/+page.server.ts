@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     typeof orderBy === 'string'
       ? (orderBy.split('.') as [
           keyof Ticket | undefined,
-          'asc' | 'desc' | undefined
+          'asc' | 'desc' | undefined,
         ])
       : [undefined, undefined]
   const limit = 10
@@ -67,8 +67,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     tickets: ticketsQuery,
     totalCount: totalCount[0].count,
     page: numberPage,
-    order: orderBy,
-    status,
+    orderBy,
   }
 }
 

@@ -4,7 +4,7 @@
   import { page } from '$app/stores'
   import Input from '$lib/components/ui/input/input.svelte'
   import { goto } from '$app/navigation'
-  import { formatDate, translateStatus } from '$lib/utils'
+  import { formatDate, translateStatus, generateSearchParams } from '$lib/utils'
   import { ArrowUpDown } from 'lucide-svelte'
   import { buttonVariants } from '$lib/components/ui/button'
   import Button from '$lib/components/ui/button/button.svelte'
@@ -16,6 +16,7 @@
 
   function searchByName() {
     const q = new URLSearchParams($page.url.searchParams.toString())
+    q.set('page', '1')
     q.set('search', search)
     goto(`/admin?${q}`, {
       keepFocus: true,
@@ -43,14 +44,18 @@
       </Select.Trigger>
       <Select.Content>
         <a
-          href={`/admin?page=${data.page}&search=${search ?? ''}&order_by=${
-            data.orderBy ?? ''
-          }&status=open`}><Select.Item value="open">Aberto</Select.Item></a
+          href={`/admin${generateSearchParams(
+            'status',
+            'open',
+            new URLSearchParams($page.url.searchParams.toString())
+          )}`}><Select.Item value="open">Aberto</Select.Item></a
         >
         <a
-          href={`/admin?page=${data.page}&search=${search ?? ''}&order_by=${
-            data.orderBy ?? ''
-          }&status=closed`}
+          href={`/admin${generateSearchParams(
+            'status',
+            'closed',
+            new URLSearchParams($page.url.searchParams.toString())
+          )}`}
         >
           <Select.Item value="closed">Fechado</Select.Item>
         </a>
@@ -66,9 +71,15 @@
           <Table.Row>
             <Table.Head>
               <a
-                href={`/admin?page=1&search=${search ?? ''}&order_by=title.${
-                  data.order === 'title.asc' ? 'desc' : 'asc'
-                }&status=${data.status}`}
+                href={`/admin${generateSearchParams(
+                  'order_by',
+                  `title.${
+                    data.orderBy && data.orderBy === 'title.asc'
+                      ? 'desc'
+                      : 'asc'
+                  }`,
+                  new URLSearchParams($page.url.searchParams.toString())
+                )}`}
                 data-sveltekit-preload-data="hover"
                 class={buttonVariants({ variant: 'ghost' })}
                 ><span>Título</span>
@@ -78,11 +89,15 @@
             <Table.Head>Status</Table.Head>
             <Table.Head>
               <a
-                href={`/admin?page=1&search=${
-                  search ?? ''
-                }&search=&order_by=createdAt.${
-                  data.order === 'createdAt.asc' ? 'desc' : 'asc'
-                }&status=${data.status}`}
+                href={`/admin${generateSearchParams(
+                  'order_by',
+                  `createdAt.${
+                    data.orderBy && data.orderBy === 'createdAt.asc'
+                      ? 'desc'
+                      : 'asc'
+                  }`,
+                  new URLSearchParams($page.url.searchParams.toString())
+                )}`}
                 data-sveltekit-preload-data="hover"
                 class={buttonVariants({ variant: 'ghost' })}
               >
@@ -107,35 +122,44 @@
         </Table.Body>
       </Table.Root>
     </div>
-    <div class="flex items-center space-x-2 justify-end mt-2">
-      {#if data.page > 1}
-        <a
-          data-sveltekit-noscroll={true}
-          data-sveltekit-preload-data="hover"
-          href={`/admin?page=${data.page - 1}&search=${search ?? ''}&order_by=${
-            data.order
-          }&status=${data.status}`}
-          class={buttonVariants({ variant: 'outline' })}
-        >
-          Anterior
-        </a>
-      {:else}
-        <Button disabled variant="outline">Anterior</Button>
-      {/if}
-      {#if data.page < Math.ceil(data.totalCount / 10)}
-        <a
-          data-sveltekit-noscroll={true}
-          data-sveltekit-preload-data="hover"
-          href={`/admin?page=${data.page + 1}&search=${search ?? ''}&order_by=${
-            data.order
-          }&status=${data.status}`}
-          class={buttonVariants({ variant: 'outline' })}
-        >
-          Próxima
-        </a>
-      {:else}
-        <Button disabled variant="outline">Próxima</Button>
-      {/if}
+    <div class="flex items-center justify-between mt-2 px-2">
+      <span class="text-sm"
+        >Page {data.page} of {Math.ceil(data.totalCount / 10)}</span
+      >
+      <div>
+        {#if data.page > 1}
+          <a
+            data-sveltekit-noscroll={true}
+            data-sveltekit-preload-data="hover"
+            href={`/admin${generateSearchParams(
+              'page',
+              String(data.page - 1),
+              new URLSearchParams($page.url.searchParams.toString())
+            )}`}
+            class={buttonVariants({ variant: 'outline' })}
+          >
+            Anterior
+          </a>
+        {:else}
+          <Button disabled variant="outline">Anterior</Button>
+        {/if}
+        {#if data.page < Math.ceil(data.totalCount / 10)}
+          <a
+            data-sveltekit-noscroll={true}
+            data-sveltekit-preload-data="hover"
+            href={`/admin${generateSearchParams(
+              'page',
+              String(data.page + 1),
+              new URLSearchParams($page.url.searchParams.toString())
+            )}`}
+            class={buttonVariants({ variant: 'outline' })}
+          >
+            Próxima
+          </a>
+        {:else}
+          <Button disabled variant="outline">Próxima</Button>
+        {/if}
+      </div>
     </div>
   </div>
 </div>
