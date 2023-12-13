@@ -10,10 +10,8 @@
 <br />
 <div align="center">
   <a href="https://github.com/samuelfr7/tickets">
-    <img src=".github/assets/logo.png" alt="Logo" width="80" height="80">
+   <h3 align="center">Tickets</h3>
   </a>
-
-<h3 align="center">Tickets</h3>
 
   <p align="center">
     👨‍💻 This is a simple helpdesk web application.
