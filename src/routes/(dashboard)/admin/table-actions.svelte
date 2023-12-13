@@ -1,8 +1,24 @@
 <script lang="ts">
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import { Button } from '$lib/components/ui/button'
-  import { MoreHorizontal } from 'lucide-svelte'
+  import { MoreHorizontal, X } from 'lucide-svelte'
+  import { invalidateAll } from '$app/navigation'
   export let id: string
+
+  async function handleSubmit(event: {
+    currentTarget: EventTarget & HTMLFormElement
+  }) {
+    const data = new FormData(event.currentTarget)
+
+    const response = await fetch(event.currentTarget.action, {
+      method: 'POST',
+      body: data,
+    })
+
+    if (response.status === 200) {
+      await invalidateAll()
+    }
+  }
 </script>
 
 <DropdownMenu.Root>
@@ -18,11 +34,17 @@
     </Button>
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
-    <form action="?/close" method="POST">
+    <form
+      action="?/close"
+      on:submit|preventDefault={handleSubmit}
+      method="POST"
+    >
       <input type="hidden" name="id" value={id} />
-      <DropdownMenu.Item
-        ><button type="submit">Fechar chamado</button></DropdownMenu.Item
-      >
+      <DropdownMenu.Item>
+        <button type="submit" class="flex items-center">
+          <X class="text-red-700 h-4 w-4 mr-2" /> Fechar chamado
+        </button>
+      </DropdownMenu.Item>
     </form>
   </DropdownMenu.Content>
 </DropdownMenu.Root>

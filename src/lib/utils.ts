@@ -90,3 +90,12 @@ export function truncate(text: string, length: number) {
 
   return text.slice(0, length) + '...'
 }
+
+export function generateSearchParams(
+  key: string,
+  value: string,
+  searchParams: URLSearchParams
+) {
+  searchParams.set(key, value)
+  return `?${searchParams.toString()}`
+}
