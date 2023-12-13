@@ -46,7 +46,7 @@ export const actions: Actions = {
         (err.message === 'AUTH_INVALID_KEY_ID' ||
           err.message === 'AUTH_INVALID_PASSWORD')
       ) {
-        return setError(form, 'password', 'Senha ou usário incorretos')
+        return setError(form, 'password', 'User or password incorrects')
       }
     }
 

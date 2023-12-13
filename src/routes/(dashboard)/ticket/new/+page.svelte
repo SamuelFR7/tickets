@@ -30,21 +30,21 @@
   >
     <Form.Field {config} name="title">
       <Form.Item>
-        <Form.Label>Título</Form.Label>
+        <Form.Label>Title</Form.Label>
         <Form.Input />
         <Form.Validation />
       </Form.Item>
     </Form.Field>
     <Form.Field {config} name="description">
       <Form.Item>
-        <Form.Label>Descrição</Form.Label>
+        <Form.Label>Description</Form.Label>
         <Form.Textarea class="resize-none h-[6rem]" />
         <Form.Validation />
       </Form.Item>
     </Form.Field>
     <div class="flex items-center justify-end space-x-4">
-      <a href="/" class={buttonVariants({ variant: 'secondary' })}>Voltar</a>
-      <Form.Button type="submit">Abrir Chamado</Form.Button>
+      <a href="/" class={buttonVariants({ variant: 'secondary' })}>Cancel</a>
+      <Form.Button type="submit">Open Ticket</Form.Button>
     </div>
   </Form.Root>
 </div>

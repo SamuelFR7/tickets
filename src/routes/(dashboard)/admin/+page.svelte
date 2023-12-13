@@ -4,13 +4,8 @@
   import { page } from '$app/stores'
   import Input from '$lib/components/ui/input/input.svelte'
   import { goto } from '$app/navigation'
-  import {
-    formatDate,
-    translateStatus,
-    generateSearchParams,
-    truncate,
-  } from '$lib/utils'
-  import { ArrowUpDown } from 'lucide-svelte'
+  import { formatDate, generateSearchParams, truncate } from '$lib/utils'
+  import { ArrowUpDown, ChevronLeft, ChevronRight } from 'lucide-svelte'
   import { buttonVariants } from '$lib/components/ui/button'
   import Button from '$lib/components/ui/button/button.svelte'
   import * as Select from '$lib/components/ui/select'
@@ -28,7 +23,7 @@
     })
   }
 
-  function handleSearch() {
+  function handleSearchDebounced() {
     if (timeout) clearTimeout(timeout)
     timeout = setTimeout(searchByName, 300)
   }
@@ -37,15 +32,15 @@
 <div class="grid items-center gap-4 pb-8 pt-6 md:py-8 container">
   <div class="flex items-center space-x-4">
     <Input
-      placeholder="Pesquisar pelo título"
+      placeholder="Search by the title"
       class="max-w-[15rem] w-full"
       type="text"
       bind:value={search}
-      on:input={handleSearch}
+      on:input={handleSearchDebounced}
     />
     <Select.Root portal={null}>
       <Select.Trigger class="w-[180px]">
-        <Select.Value placeholder="Filtre por um status" />
+        <Select.Value placeholder="Filter by status" />
       </Select.Trigger>
       <Select.Content>
         <a
@@ -53,7 +48,7 @@
             'status',
             'open',
             new URLSearchParams($page.url.searchParams.toString())
-          )}`}><Select.Item value="open">Aberto</Select.Item></a
+          )}`}><Select.Item value="open">Open</Select.Item></a
         >
         <a
           href={`/admin${generateSearchParams(
@@ -62,7 +57,7 @@
             new URLSearchParams($page.url.searchParams.toString())
           )}`}
         >
-          <Select.Item value="closed">Fechado</Select.Item>
+          <Select.Item value="closed">Closed</Select.Item>
         </a>
       </Select.Content>
       <Select.Input name="favoriteFruit" />
@@ -87,7 +82,7 @@
                 )}`}
                 data-sveltekit-preload-data="hover"
                 class={buttonVariants({ variant: 'ghost' })}
-                ><span>Título</span>
+                ><span>Title</span>
                 <ArrowUpDown class={'ml-2 h-4 w-4'} />
               </a>
             </Table.Head>
@@ -106,19 +101,19 @@
                 data-sveltekit-preload-data="hover"
                 class={buttonVariants({ variant: 'ghost' })}
               >
-                <span>Data de Abertura</span>
+                <span>Opened at</span>
                 <ArrowUpDown class={'ml-2 h-4 w-4'} />
               </a>
             </Table.Head>
-            <Table.Head>Última de Atualização</Table.Head>
-            <Table.Head>Ações</Table.Head>
+            <Table.Head>Last update</Table.Head>
+            <Table.Head>Actions</Table.Head>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {#each data.tickets as ticket}
             <Table.Row>
               <Table.Cell>{truncate(ticket.title, 45)}</Table.Cell>
-              <Table.Cell>{translateStatus(ticket.status)}</Table.Cell>
+              <Table.Cell>{ticket.status.toUpperCase()}</Table.Cell>
               <Table.Cell>{formatDate(ticket.createdAt)}</Table.Cell>
               <Table.Cell>{formatDate(ticket.updatedAt)}</Table.Cell>
               <Table.Cell><TableActions id={ticket.id} /></Table.Cell>
@@ -141,12 +136,13 @@
               String(data.page - 1),
               new URLSearchParams($page.url.searchParams.toString())
             )}`}
-            class={buttonVariants({ variant: 'outline' })}
+            class={buttonVariants({ variant: 'outline', size: 'icon' })}
           >
-            Anterior
+            <ChevronLeft />
           </a>
         {:else}
-          <Button disabled variant="outline">Anterior</Button>
+          <Button disabled variant="outline" size="icon"><ChevronLeft /></Button
+          >
         {/if}
         {#if data.page < Math.ceil(data.totalCount / 10)}
           <a
@@ -157,12 +153,14 @@
               String(data.page + 1),
               new URLSearchParams($page.url.searchParams.toString())
             )}`}
-            class={buttonVariants({ variant: 'outline' })}
+            class={buttonVariants({ variant: 'outline', size: 'icon' })}
           >
-            Próxima
+            <ChevronRight />
           </a>
         {:else}
-          <Button disabled variant="outline">Próxima</Button>
+          <Button disabled variant="outline" size="icon"
+            ><ChevronRight /></Button
+          >
         {/if}
       </div>
     </div>

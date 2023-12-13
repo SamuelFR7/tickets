@@ -24,7 +24,7 @@
     <ThemeToggle />
     {#if session}
       {#if session.user.role === 'admin'}
-        <a class={buttonVariants()} href="/admin/new-user">Admin</a>
+        <a class={buttonVariants()} href="/admin/new-user">New User</a>
       {/if}
       <form
         method="POST"
@@ -44,7 +44,7 @@
           {#if isLoading}
             <Loader2 class="mr-2 w-4 h-4" />
           {:else}
-            <LogOut class="mr-2 w-4 h-4" />{/if}Sair</Button
+            <LogOut class="mr-2 w-4 h-4" />{/if}Logout</Button
         >
       </form>
     {/if}
