@@ -1,5 +1,5 @@
 import { db } from '$lib/server/db/index.js'
-import { whitelist } from '$lib/server/db/schema.js'
+import { whitelist } from '$lib/server/db/schema/index.js'
 import { auth, googleAuth } from '$lib/server/lucia.js'
 import { OAuthRequestError } from '@lucia-auth/oauth'
 import { eq } from 'drizzle-orm'
