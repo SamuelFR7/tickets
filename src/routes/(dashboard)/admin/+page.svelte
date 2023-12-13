@@ -4,7 +4,12 @@
   import { page } from '$app/stores'
   import Input from '$lib/components/ui/input/input.svelte'
   import { goto } from '$app/navigation'
-  import { formatDate, translateStatus, generateSearchParams } from '$lib/utils'
+  import {
+    formatDate,
+    translateStatus,
+    generateSearchParams,
+    truncate,
+  } from '$lib/utils'
   import { ArrowUpDown } from 'lucide-svelte'
   import { buttonVariants } from '$lib/components/ui/button'
   import Button from '$lib/components/ui/button/button.svelte'
@@ -112,7 +117,7 @@
         <Table.Body>
           {#each data.tickets as ticket}
             <Table.Row>
-              <Table.Cell>{ticket.title}</Table.Cell>
+              <Table.Cell>{truncate(ticket.title, 45)}</Table.Cell>
               <Table.Cell>{translateStatus(ticket.status)}</Table.Cell>
               <Table.Cell>{formatDate(ticket.createdAt)}</Table.Cell>
               <Table.Cell>{formatDate(ticket.updatedAt)}</Table.Cell>
