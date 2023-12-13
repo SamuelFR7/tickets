@@ -89,5 +89,7 @@ export const actions: Actions = {
         status: 'closed',
       })
       .where(eq(tickets.id, ticketId))
+
+    return { success: true }
   },
 }
