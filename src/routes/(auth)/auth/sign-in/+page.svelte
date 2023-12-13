@@ -1,7 +1,6 @@
 <script lang="ts">
   import * as Card from '$lib/components/ui/card'
   import GoogleIcon from '$lib/components/icons/google.svelte'
-  import type { SuperValidated } from 'sveltekit-superforms'
   import Button from '$lib/components/ui/button/button.svelte'
 </script>
 
