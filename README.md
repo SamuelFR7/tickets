@@ -54,7 +54,7 @@ To get a local copy up and running follow these simple example steps.
    ```
 2. Copy env example
    ```sh
-   cp .env.example .env
+   cp .env.example .env.local
    ```
 3. Fill env variables
 4. Install packages
