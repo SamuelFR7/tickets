@@ -5,7 +5,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
   const session = await locals.auth.validate()
 
   if (!session || session.user.role !== 'admin') {
-    throw redirect(302, '/')
+    redirect(302, '/');
   }
 
   return {}

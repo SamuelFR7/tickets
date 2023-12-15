@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
   const session = await locals.auth.validate()
 
   if (!session) {
-    throw redirect(302, '/auth/sign-in')
+    redirect(302, '/auth/sign-in');
   }
 
   const search = url.searchParams.get('search')

@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ params }) => {
   const ticket = ticketQuery[0]
 
   if (!ticket) {
-    throw redirect(302, '/')
+    redirect(302, '/');
   }
 
   return {

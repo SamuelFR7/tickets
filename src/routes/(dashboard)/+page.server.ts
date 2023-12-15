@@ -8,11 +8,11 @@ export const load: PageServerLoad = async ({ locals }) => {
   const session = await locals.auth.validate()
 
   if (!session) {
-    throw redirect(302, '/auth/sign-in')
+    redirect(302, '/auth/sign-in');
   }
 
   if (session.user.role === 'admin') {
-    throw redirect(302, '/admin')
+    redirect(302, '/admin');
   }
 
   const ticketsQuery = await db
