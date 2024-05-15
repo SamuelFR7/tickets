@@ -11,6 +11,7 @@
     "format:check": "prettier --plugin-search-dir . --check .",
     "format:write": "prettier --plugin-search-dir . --write .",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
     "shadcn:add": "pnpm dlx shadcn-svelte@latest add",
     "db:studio": "drizzle-kit studio",
     "db:generate": "drizzle-kit generate",
