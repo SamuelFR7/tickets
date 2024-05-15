@@ -1,23 +1,15 @@
 import { faker } from '@faker-js/faker'
 import { db } from '.'
-import {
-  tickets,
-  type TicketInsert,
-  user,
-  key,
-  whitelist,
-  session,
-} from './schema'
+import { tickets, users, sessions } from './schema'
 import chalk from 'chalk'
+import { hash } from '@node-rs/argon2'
 
 /**
  * Clear database
  */
 await db.delete(tickets)
-await db.delete(key)
-await db.delete(whitelist)
-await db.delete(session)
-await db.delete(user)
+await db.delete(users)
+await db.delete(sessions)
 
 console.log(chalk.yellow('✔ Database cleared'))
 
@@ -25,15 +17,22 @@ console.log(chalk.yellow('✔ Database cleared'))
  * Create user
  */
 const [client] = await db
-  .insert(user)
+  .insert(users)
   .values({
-    id: faker.string.alphanumeric(15),
-    username: faker.internet.exampleEmail(),
-    role: 'user',
+    username: 'admin',
+    role: 'admin',
+    passwordHash: await hash('admin', {
+      memoryCost: 19456,
+      timeCost: 2,
+      outputLen: 32,
+      parallelism: 1,
+    }),
   })
   .returning()
 
 console.log(chalk.green('✔ User created'))
+
+type TicketInsert = typeof tickets.$inferInsert
 
 /**
  * Create tickets
@@ -60,14 +59,5 @@ const ticketsToInsert = generateTickets()
 await db.insert(tickets).values(ticketsToInsert)
 
 console.log(chalk.green('✔ Tickets created'))
-
-/**
- * Add your email to the whitelist
- */
-await db.insert(whitelist).values({
-  email: process.env.MY_EMAIL!,
-})
-
-console.log(chalk.green('✔ Email added to whitelist'))
 
 process.exit(0)

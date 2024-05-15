@@ -24,13 +24,10 @@
 ### Built With
 
 - [SvelteKit](https://kit.svelte.dev/)
-- [DrizzleORM](https://orm.drizzle.team/)
-- [Turso](https://turso.tech/)
-- [Lucia](https://lucia-auth.com/)
 - [TailwindCSS](https://tailwindcss.com/)
-- [Resend](https://resend.com/)
-- [React Email](https://react.email/)
-- [Bun](https://bun.sh/)
+- [DrizzleORM](https://orm.drizzle.team/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Lucia](https://lucia-auth.com/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -42,9 +39,7 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-- Turso db instance
-- Resend API Key
-- Google Auth API Key
+- PostgreSQL
 
 ### Installation
 
@@ -59,19 +54,19 @@ To get a local copy up and running follow these simple example steps.
 3. Fill env variables
 4. Install packages
    ```sh
-   bun install
+   pnpm install
    ```
 5. Migrate database
    ```sh
-   bun db:migrate
+   pnpm db:migrate
    ```
 6. Fill your database
    ```sh
-   bun db:seed
+   pnpm db:seed
    ```
 7. Start the server
    ```sh
-   bun dev
+   pnpm dev
    ```
 8. See the application running on http://localhost:5173
 

@@ -1,10 +1,8 @@
 import { z } from 'zod'
 
-export const inviteUserSchema = z.object({
-  email: z
-    .string()
-    .email()
-    .endsWith('@gmail.com', { message: 'Must be a gmail address' }),
+export const authSchema = z.object({
+  username: z.string().toLowerCase(),
+  password: z.string(),
 })
 
-export type InviteUserSchema = typeof inviteUserSchema
+export type AuthSchema = typeof authSchema

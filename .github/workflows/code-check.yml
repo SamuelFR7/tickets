@@ -5,57 +5,44 @@ on:
     branches: ['*']
 
 env:
-  DATABASE_URL: 'https://fakeurl.com'
-  DATABASE_AUTH_TOKEN: 'fake-token'
+  DATABASE_URL: 'fake'
 
 jobs:
-  lint:
+  typecheck-lint:
     runs-on: ubuntu-latest
-    name: Lint
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v1
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
         with:
-          bun-version: latest
+          node-version: 20
 
-      - name: Install deps
-        run: bun install
-
-      - run: bun run lint
-
-  format:
-    runs-on: ubuntu-latest
-    name: Format
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - uses: oven-sh/setup-bun@v1
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          bun-version: latest
+          version: 9.1.0
 
-      - name: Install deps
-        run: bun install
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-      - run: bun run format:check
-
-  tsc:
-    runs-on: ubuntu-latest
-    name: Typecheck
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - uses: oven-sh/setup-bun@v1
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
         with:
-          bun-version: latest
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
-      - name: Install deps
-        run: bun install
+      - name: Install deps (with cache)
+        run: pnpm install
 
-      - run: bun run check
+      - name: Run lint
+        run: pnpm run lint
+
+      - name: Run typecheck
+        run: pnpm run typecheck
