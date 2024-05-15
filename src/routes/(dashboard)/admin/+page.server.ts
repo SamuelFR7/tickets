@@ -2,7 +2,7 @@ import { redirect, type Actions } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import { db } from '$lib/server/db'
 import { tickets, type Ticket } from '$lib/server/db/schema'
-import { and, asc, desc, eq, like, sql } from 'drizzle-orm'
+import { and, asc, desc, eq, ilike, sql } from 'drizzle-orm'
 import { z } from 'zod'
 
 export const load: PageServerLoad = async ({ locals, url }) => {
@@ -49,7 +49,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
       and(
         status ? eq(tickets.status, status) : undefined,
         typeof search === 'string'
-          ? like(tickets.title, `%${search}%`)
+          ? ilike(tickets.title, `%${search}%`)
           : undefined
       )
     )
@@ -61,7 +61,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
       and(
         eq(tickets.status, 'open'),
         typeof search === 'string'
-          ? like(tickets.title, `%${search}%`)
+          ? ilike(tickets.title, `%${search}%`)
           : undefined
       )
     )
