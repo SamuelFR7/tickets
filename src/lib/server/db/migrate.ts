@@ -1,19 +1,23 @@
-import { createClient } from '@libsql/client'
-import chalk from 'chalk'
+import 'dotenv/config'
+import { drizzle } from 'drizzle-orm/postgres-js'
+import { migrate } from 'drizzle-orm/postgres-js/migrator'
 
-import { drizzle } from 'drizzle-orm/libsql'
-import { migrate } from 'drizzle-orm/libsql/migrator'
+import postgres from 'postgres'
 
-const connection = createClient({
-  url: process.env.DATABASE_URL!,
-  authToken: process.env.DATABASE_AUTH_TOKEN,
+async function main() {
+  const db = drizzle(postgres(process.env.DATABASE_URL!, { max: 1 }))
+
+  console.log('Running migrations')
+
+  await migrate(db, { migrationsFolder: 'drizzle' })
+
+  console.log('Migrated successfully')
+
+  process.exit(0)
+}
+
+main().catch((e) => {
+  console.error('Migration failed')
+  console.error(e)
+  process.exit(1)
 })
-const db = drizzle(connection)
-
-await migrate(db, { migrationsFolder: 'drizzle' })
-
-console.log(chalk.greenBright('Migrations applied successfully!'))
-
-connection.close()
-
-process.exit()

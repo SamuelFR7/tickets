@@ -5,25 +5,20 @@ import { tickets } from '$lib/server/db/schema'
 import { and, eq } from 'drizzle-orm'
 
 export const load: PageServerLoad = async ({ locals }) => {
-  const session = await locals.auth.validate()
+  const user = locals.user
 
-  if (!session) {
-    redirect(302, '/auth/sign-in');
+  if (!user) {
+    redirect(302, '/auth/sign-in')
   }
 
-  if (session.user.role === 'admin') {
-    redirect(302, '/admin');
+  if (user.role === 'admin') {
+    redirect(302, '/admin')
   }
 
   const ticketsQuery = await db
     .select()
     .from(tickets)
-    .where(
-      and(
-        eq(tickets.employeeId, session.user.userId),
-        eq(tickets.status, 'open')
-      )
-    )
+    .where(and(eq(tickets.employeeId, user.id), eq(tickets.status, 'open')))
 
   return {
     tickets: ticketsQuery,
@@ -32,9 +27,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
   cancel: async ({ request, locals }) => {
-    const session = await locals.auth.validate()
+    const user = await locals.user
 
-    if (!session) {
+    if (!user) {
       throw new Error('Unauthorized')
     }
 
@@ -52,10 +47,7 @@ export const actions: Actions = {
         status: 'closed',
       })
       .where(
-        and(
-          eq(tickets.id, ticketId as string),
-          eq(tickets.employeeId, session.user.userId)
-        )
+        and(eq(tickets.id, ticketId as string), eq(tickets.employeeId, user.id))
       )
   },
 }

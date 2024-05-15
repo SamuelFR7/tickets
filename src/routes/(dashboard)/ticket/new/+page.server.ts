@@ -1,11 +1,17 @@
 import { superValidate } from 'sveltekit-superforms/server'
 import type { PageServerLoad } from './$types'
 import { ticketSchema } from '$lib/validations/ticket'
-import { fail, type Actions } from '@sveltejs/kit'
+import { fail, redirect, type Actions } from '@sveltejs/kit'
 import { db } from '$lib/server/db'
 import { tickets } from '$lib/server/db/schema'
 
-export const load: PageServerLoad = () => {
+export const load: PageServerLoad = ({ locals }) => {
+  const user = locals.user
+
+  if (!user) {
+    return redirect(302, '/auth/sign-in')
+  }
+
   return {
     form: superValidate(ticketSchema),
   }
@@ -13,9 +19,9 @@ export const load: PageServerLoad = () => {
 
 export const actions: Actions = {
   create: async (event) => {
-    const session = await event.locals.auth.validate()
+    const user = event.locals.user
 
-    if (!session) {
+    if (!user) {
       throw new Error('Unauthorized')
     }
 
@@ -28,7 +34,7 @@ export const actions: Actions = {
     }
 
     await db.insert(tickets).values({
-      employeeId: session.user.userId,
+      employeeId: user.id,
       status: 'open',
       ...form.data,
     })

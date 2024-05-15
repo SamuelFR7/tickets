@@ -1,7 +1,22 @@
 <script lang="ts">
   import * as Card from '$lib/components/ui/card'
-  import GoogleIcon from '$lib/components/icons/google.svelte'
-  import Button from '$lib/components/ui/button/button.svelte'
+  import { authSchema, type AuthSchema } from '$lib/validations/auth'
+  import type { SuperValidated } from 'sveltekit-superforms'
+  import type { FormOptions } from 'formsnap'
+  import { goto } from '$app/navigation'
+  import * as Form from '$lib/components/ui/form'
+  import { buttonVariants } from '$lib/components/ui/button'
+
+  export let form: SuperValidated<AuthSchema>
+
+  const options: FormOptions<AuthSchema> = {
+    validators: authSchema,
+    onResult: async ({ result }) => {
+      if (result.type === 'success') {
+        await goto('/')
+      }
+    },
+  }
 </script>
 
 <div class="max-w-2xl w-full mx-auto mt-20">
@@ -11,11 +26,27 @@
       <Card.Description>Choose your favorite sign-in method</Card.Description>
     </Card.Header>
     <Card.Content class="grid gap-4">
-      <a href="/auth/sign-in/google">
-        <Button class="w-full"
-          ><GoogleIcon className="mr-2 h-4 w-4" />Sign in with Google</Button
+      <Form.Root {form} method="POST" {options} schema={authSchema} let:config>
+        <Form.Field {config} name="username">
+          <Form.Item>
+            <Form.Label>Username</Form.Label>
+            <Form.Input />
+            <Form.Validation />
+          </Form.Item></Form.Field
         >
-      </a>
+        <Form.Field {config} name="password">
+          <Form.Item>
+            <Form.Label>Password</Form.Label>
+            <Form.Input type="password" />
+            <Form.Validation />
+          </Form.Item></Form.Field
+        >
+        <div class="flex items-center justify-end space-x-4">
+          <a href="/" class={buttonVariants({ variant: 'secondary' })}>Cancel</a
+          >
+          <Form.Button type="submit">Sign In</Form.Button>
+        </div>
+      </Form.Root>
     </Card.Content>
   </Card.Root>
 </div>

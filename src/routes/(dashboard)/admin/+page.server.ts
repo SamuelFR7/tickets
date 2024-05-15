@@ -3,18 +3,21 @@ import type { PageServerLoad } from './$types'
 import { db } from '$lib/server/db'
 import { tickets, type Ticket } from '$lib/server/db/schema'
 import { and, asc, desc, eq, like, sql } from 'drizzle-orm'
+import { z } from 'zod'
 
 export const load: PageServerLoad = async ({ locals, url }) => {
-  const session = await locals.auth.validate()
+  const user = locals.user
 
-  if (!session) {
-    redirect(302, '/auth/sign-in');
+  if (!user || user.role !== 'admin') {
+    redirect(302, '/auth/sign-in')
   }
 
   const search = url.searchParams.get('search')
   const page = url.searchParams.get('page')
   const orderBy = url.searchParams.get('order_by')
-  const status = url.searchParams.get('status')
+  const status = z
+    .enum(['open', 'closed'])
+    .parse(url.searchParams.get('status') ?? 'open')
 
   const [column, order] =
     typeof orderBy === 'string'
@@ -73,9 +76,9 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 export const actions: Actions = {
   close: async ({ request, locals }) => {
-    const session = await locals.auth.validate()
+    const user = locals.user
 
-    if (!session) {
+    if (!user || user.role !== 'admin') {
       throw new Error('Unauthorized')
     }
 

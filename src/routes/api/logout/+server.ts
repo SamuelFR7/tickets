@@ -1,8 +1,8 @@
-import { auth } from '$lib/server/lucia'
-import type { RequestHandler } from '@sveltejs/kit'
+import { lucia } from '$lib/server/auth'
+import { redirect, type RequestHandler } from '@sveltejs/kit'
 
-export const POST: RequestHandler = async ({ locals }) => {
-  const session = await locals.auth.validate()
+export const POST: RequestHandler = async ({ locals, cookies }) => {
+  const session = locals.session
 
   if (!session) {
     return new Response('Unathorized', {
@@ -10,14 +10,12 @@ export const POST: RequestHandler = async ({ locals }) => {
     })
   }
 
-  await auth.invalidateSession(session.sessionId)
-
-  locals.auth.setSession(null)
-
-  return new Response('', {
-    headers: {
-      Location: '/auth/sign-in',
-    },
-    status: 302,
+  await lucia.invalidateSession(session.id)
+  const sessionCookie = lucia.createBlankSessionCookie()
+  cookies.set(sessionCookie.name, sessionCookie.value, {
+    path: '.',
+    ...sessionCookie.attributes,
   })
+
+  redirect(302, '/auth/sign-in')
 }
